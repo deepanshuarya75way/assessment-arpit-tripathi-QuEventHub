@@ -71,7 +71,7 @@ export const login = async (req, res) => {
                 { phone: identifier },
                 { q_id: identifier }
             ]
-        });
+        }).select("+password");
 
         if (user) {
             const isMatch = await bcrypt.compare(password, user.password);
@@ -159,14 +159,14 @@ export const verifyUser = async (req, res) => {
             return res.status(400).json({ message: "Invalid request. Provide userId, otp, and type ('email' or 'phone')." });
         }
 
-        const user = await UserModel.findById(userId);
+        const user = await UserModel.findById(userId).select("+emailOtp +phoneOtp +otpExpiry");
         if (!user) return res.status(404).json({ message: "User not found" });
 
         if (user.isVerified) {
             return res.status(400).json({ message: "User is already fully verified." });
         }
 
-        if (user.otpExpiry && user.otpExpiry < Date.now()) {
+        if (!user.otpExpiry || user.otpExpiry.getTime() < Date.now()) {
             return res.status(400).json({ message: "OTP has expired. Please request a resend." });
         }
 
@@ -237,7 +237,7 @@ export const resendOtp = async (req, res) => {
             });
         }
 
-        const user = await UserModel.findById(userId);
+        const user = await UserModel.findById(userId).select("+emailOtp +phoneOtp +otpExpiry");
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -296,7 +296,7 @@ export const forgotPassword = async (req, res) => {
 
         const { email } = validation.data;
 
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ email }).select("+emailOtp +otpExpiry");
         if (!user) {
             return res.status(404).json({ message: "User with this email does not exist." });
         }
@@ -331,7 +331,7 @@ export const resetPassword = async (req, res) => {
 
         const { email, otp, newPassword } = validation.data;
 
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ email }).select("+emailOtp +otpExpiry");
         if (!user) return res.status(404).json({ message: "User not found" });
 
         if (user.emailOtp !== otp) {

@@ -46,20 +46,24 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     isVerified: {
         type: Boolean,
         default: false
     },
     emailOtp: {
-        type: String
+        type: String,
+        select: false
     },
     phoneOtp: {
-        type: String
+        type: String,
+         select: false
     },
     otpExpiry: {
-        type: Date
+        type: Date,
+         select: false
     }
 }, { timestamps: true });
 
