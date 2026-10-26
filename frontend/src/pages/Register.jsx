@@ -24,8 +24,8 @@ export default function Register() {
 
   // Helper to save data and redirect
   const handleLoginSuccess = (data) => {
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user || {}));
+    sessionStorage.setItem("token", data.token);
+    sessionStorage.setItem("user", JSON.stringify(data.user || {}));
     setMessage("Verification Complete! Redirecting...");
     setTimeout(() => {
         navigate("/");

@@ -4,7 +4,7 @@ import { ArrowRight, CalendarDays, Loader2, MapPin, Users } from "lucide-react";
 import api from "../api";
 
 export default function StudentDashboard() {
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const user = JSON.parse(sessionStorage.getItem("user") || "null");
   const [events, setEvents] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -50,8 +50,8 @@ export default function Login() {
       const res = await api.post("/auth/login", credentials);
 
       // Save JWT & User
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      sessionStorage.setItem("token", res.data.token);
+      sessionStorage.setItem("user", JSON.stringify(res.data.user));
 
       // Role-based Navigation 
       const role = res.data.user.role;

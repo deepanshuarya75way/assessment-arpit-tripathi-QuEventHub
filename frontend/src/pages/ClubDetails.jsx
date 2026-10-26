@@ -32,7 +32,7 @@ const ClubDetails = () => {
   };
 
   const handleJoin = async () => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       showToast("Please login to join.", "info");
       navigate("/login", { state: { from: `/clubs/${id}` } });
       return;
@@ -63,7 +63,7 @@ const ClubDetails = () => {
   }
 
   const imageSrc = club.imageUrl || club.image?.path;
-  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const currentUser = JSON.parse(sessionStorage.getItem("user") || "null");
   const userId = currentUser?.id || currentUser?._id;
   const joined = Boolean(userId && club.members?.some((member) => {
     const memberId = typeof member === "object" ? member._id || member.id : member;

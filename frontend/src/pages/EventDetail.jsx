@@ -34,7 +34,7 @@ export default function EventDetail() {
   };
 
   const handleRegistration = async () => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
         showToast("You must log in to register for an event.", "info");
       navigate("/login", { state: { from: window.location.pathname } });
         return;

@@ -35,10 +35,10 @@ const Navbar = () => {
   useEffect(() => {
     const checkAuth = () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         setLoggedIn(!!token);
         if (token) {
-          const rawUser = localStorage.getItem("user");
+          const rawUser = sessionStorage.getItem("user");
           if (rawUser) {
             const parsed = JSON.parse(rawUser);
             setRole(parsed?.role || null);
@@ -71,8 +71,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
       setLoggedIn(false);
       setRole(null);
       setProfileOpen(false);

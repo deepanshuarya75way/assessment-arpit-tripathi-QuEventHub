@@ -34,7 +34,7 @@ export default function Profile() {
   // Fetch user profile (Logic unchanged)
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         navigate("/login");
         return;
@@ -56,8 +56,8 @@ export default function Profile() {
         });
       } catch (err) {
         if (err.response?.status === 401 || err.response?.status === 403) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("user");
           navigate("/login");
         } else {
           setError(err.response?.data?.message || "Failed to load profile.");
@@ -93,7 +93,7 @@ export default function Profile() {
         q_id: res.data.data.q_id,
         email: res.data.data.email
       };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      sessionStorage.setItem("user", JSON.stringify(updatedUser));
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile.");
     } finally {

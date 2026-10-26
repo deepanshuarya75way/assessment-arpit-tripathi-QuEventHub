@@ -34,7 +34,7 @@ const Clubs = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
   const category = new URLSearchParams(search).get("type") || "all";
-  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const currentUser = JSON.parse(sessionStorage.getItem("user") || "null");
 
   const hasJoinedClub = (club) => {
     const userId = currentUser?.id || currentUser?._id;
@@ -91,7 +91,7 @@ const Clubs = () => {
     e.preventDefault(); // Prevent Link navigation if inside a Link
     e.stopPropagation();
 
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       showToast("Please login to join a club.", "info");
       navigate("/login", { state: { from: `/clubs/${clubId}` } });
       return;

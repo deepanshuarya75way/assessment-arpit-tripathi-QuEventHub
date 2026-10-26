@@ -1,8 +1,15 @@
 // src/api.js
 import axios from "axios";
 
+
+const isProd = import.meta.env.PROD;
+const baseURL = import.meta.env.VITE_API_URL || (isProd ? "": "http://localhost:5000");
+if(isProd && !baseURL.startsWith("https://")){
+  throw new Error("Production API must use HTTPS");
+}
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",  // Backend API base URL with /api prefix
+  baseURL: `${baseURL}/api`,  // Backend API base URL with /api prefix
+  timeout: 15000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -16,7 +23,7 @@ api.interceptors.request.use(
       if (config.data instanceof FormData) {
         delete config.headers['Content-Type'];
       }
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -53,8 +60,8 @@ api.interceptors.response.use(
     // Handle authentication errors
     if (error.response?.status === 401 || error.response?.status === 403) {
       try {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+       sessionStorage.removeItem("user");
         console.log("Authentication failed - token cleared");
       } catch (storageError) {
         console.error('Error clearing storage:', storageError);

@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     useEffect(() => {
         // Check authentication
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             setIsAuthenticated(!!token);
         } catch (error) {
             console.error('Error checking authentication:', error);
@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     }
 
     if (allowedRoles?.length) {
-        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        const user = JSON.parse(sessionStorage.getItem('user') || 'null');
         if (!allowedRoles.includes(user?.role)) {
             return <Navigate to={user?.role === 'admin' ? '/admin' : user?.role === 'club' ? '/club' : '/dashboard'} replace />;
         }
