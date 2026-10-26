@@ -10,6 +10,7 @@ import contactRoute from './routes/contactRoutes.js';
 import clubRoute from './routes/clubRoutes.js';
 import adminRoute from './routes/adminRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
+import {encryptResponse} from "./middleware/encryptResponse.js"
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -51,12 +52,13 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization',"X-Response-Public-Key"]
 }));
 
 
 
 app.use(express.json({limit: '1mb'}));
+app.use(encryptResponse);
 
 app.use(helmet({
     contentSecurityPolicy:{
